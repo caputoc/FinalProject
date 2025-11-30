@@ -1,0 +1,25 @@
+Type,Title,Creator,Album,Year,DurationMinutes,Rating,ShowTitle,Season,Episode
+Track,Bohemian Rhapsody,Queen,A Night at the Opera,1975,6,4.9,,,
+Track,Don't Stop Me Now,Queen,Jazz,1978,4,4.8,,,
+Track,Billie Jean,Michael Jackson,Thriller,1982,5,4.7,,,
+Track,Smells Like Teen Spirit,Nirvana,Nevermind,1991,5,4.6,,,
+Track,Humble,Kendrick Lamar,DAMN.,2017,3,4.5,,,
+Track,Rolling in the Deep,Adele,21,2010,3,4.6,,,
+Track,Clocks,Coldplay,A Rush of Blood to the Head,2002,5,4.4,,,
+Track,Lose Yourself,Eminem,8 Mile,2002,5,4.8,,,
+AudioBook,The Hobbit,J.R.R. Tolkien,,1937,680,up,,,
+AudioBook,The Fellowship of the Ring,J.R.R. Tolkien,,1954,1130,up,,,
+AudioBook,1984,George Orwell,,1949,650,up,,,
+AudioBook,Becoming,Michelle Obama,,2018,1140,down,,,
+AudioBook,The Alchemist,Paulo Coelho,,1988,240,up,,,
+AudioBook,Dune,Frank Herbert,,1965,1260,up,,,
+AudioBook,The Martian,Andy Weir,,2011,600,up,,,
+AudioBook,Pride and Prejudice,Jane Austen,,1813,760,down,,,
+TVEpisode,Pilot,Vince Gilligan,,2008,58,9,Breaking Bad,1,1
+TVEpisode,Cat's in the Bag,Vince Gilligan,,2008,48,9,Breaking Bad,1,2
+TVEpisode,Winter Is Coming,David Benioff & D.B. Weiss,,2011,62,9,Game of Thrones,1,1
+TVEpisode,The Kingsroad,David Benioff & D.B. Weiss,,2011,56,8,Game of Thrones,1,2
+TVEpisode,Days Gone Bye,Frank Darabont,,2010,67,9,The Walking Dead,1,1
+TVEpisode,Guts,Frank Darabont,,2010,46,8,The Walking Dead,1,2
+TVEpisode,Pilot,Greg Daniels,,2005,23,8,The Office,1,1
+TVEpisode,Diversity Day,Greg Daniels,,2005,22,9,The Office,1,2
