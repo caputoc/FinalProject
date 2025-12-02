@@ -10,8 +10,139 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.io.PrintWriter;
+import java.awt.Color;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import java.util.InputMismatchException;
+
 
 public class FinalProject {
+
+	private static void GUI(List<Media<?>> media) {
+		
+		JFrame frame = new JFrame("Media");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1600, 550);
+		frame.setTitle("Media Menu");
+		frame.setLayout(null);
+		frame.getContentPane().setBackground(Color.DARK_GRAY);
+		frame.setVisible(true);
+		
+		
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+		panel.setLayout(new GridLayout(5, 2, 5, 5));
+		
+		JButton printAllBtn = new JButton("Print All Media");
+		printAllBtn.addActionListener(a -> printAllMedia(media));
+		printAllBtn.setBounds(650, 0, 200, 50);
+		printAllBtn.setBorder(BorderFactory.createEmptyBorder());
+		printAllBtn.setBackground(Color.blue);
+		printAllBtn.setForeground(Color.WHITE);
+		
+		JButton printTracksBtn = new JButton("Print All Tracks");
+		printTracksBtn.addActionListener(a -> printAllTracks(media));
+		printTracksBtn.setBounds(650, 52, 200, 50);
+		printTracksBtn.setBorder(BorderFactory.createEmptyBorder());
+		printTracksBtn.setBackground(Color.blue);
+		printTracksBtn.setForeground(Color.WHITE);
+		
+		JButton printAudiobooksBtn = new JButton("Print All AudioBooks Media");
+		printAudiobooksBtn.addActionListener(a -> printAllAudiobooks(media));
+		printAudiobooksBtn.setBounds(650, 104, 200, 50);
+		printAudiobooksBtn.setBorder(BorderFactory.createEmptyBorder());
+		printAudiobooksBtn.setBackground(Color.blue);
+		printAudiobooksBtn.setForeground(Color.WHITE);
+		
+		JButton printTvBtn = new JButton("Print All TV Episodes Media");
+		printTvBtn.addActionListener(a -> printAllTvEpisodes(media));
+		printTvBtn.setBounds(650, 156, 200, 50);
+		printTvBtn.setBorder(BorderFactory.createEmptyBorder());
+		printTvBtn.setBackground(Color.blue);
+		printTvBtn.setForeground(Color.WHITE);
+		
+		JTextField creatorTxt = new JTextField();
+		creatorTxt.setBounds(870, 208, 200, 50);
+		
+		
+		JButton printByCreatorBtn = new JButton("Print All By Creator");
+		printByCreatorBtn.addActionListener(a -> {
+		String creator = creatorTxt.getText();	
+		printByCreator(media, creator);}
+		);
+		
+		printByCreatorBtn.setBounds(650, 208, 200, 50);
+		printByCreatorBtn.setBorder(BorderFactory.createEmptyBorder());
+		printByCreatorBtn.setBackground(Color.blue);
+		printByCreatorBtn.setForeground(Color.WHITE);
+		
+		JButton sortByYearBtn = new JButton("Sort By Year");
+		sortByYearBtn.addActionListener(a -> sortByYear(media));
+		sortByYearBtn.setBounds(650, 260, 200, 50);
+		sortByYearBtn.setBorder(BorderFactory.createEmptyBorder());
+		sortByYearBtn.setBackground(Color.blue);
+		sortByYearBtn.setForeground(Color.WHITE);
+		
+		JButton sortByTitleBtn = new JButton("Sort By Title");
+		sortByTitleBtn.addActionListener(a -> sortByTitle(media));
+		sortByTitleBtn.setBounds(650, 312, 200, 50);
+		sortByTitleBtn.setBorder(BorderFactory.createEmptyBorder());
+		sortByTitleBtn.setBackground(Color.blue);
+		sortByTitleBtn.setForeground(Color.WHITE);
+		
+		JTextField yearTxt = new JTextField();
+		yearTxt.setBounds(870, 364, 200, 50);
+		JButton printByYearBtn = new JButton("Print All By Year");
+		printByYearBtn.addActionListener(a -> {
+		int year = Integer.parseInt(yearTxt.getText());	
+		printByYear(media, year);}
+		);
+		printByYearBtn.setBounds(650, 364, 200, 50);
+		printByYearBtn.setBorder(BorderFactory.createEmptyBorder());
+		printByYearBtn.setBackground(Color.blue);
+		printByYearBtn.setForeground(Color.WHITE);
+		
+		JButton clearBtn = new JButton("Clear Console");
+		clearBtn.addActionListener(a -> clearConsole());
+		clearBtn.setBounds(1400, 420, 100, 30);
+		clearBtn.setBorder(BorderFactory.createEmptyBorder());
+		clearBtn.setBackground(Color.MAGENTA);
+		clearBtn.setForeground(Color.black);
+		
+		JButton ExitBtn = new JButton("Exit");
+		ExitBtn.addActionListener(a -> System.exit(0));
+		ExitBtn.setBounds(1400, 460, 100, 30);
+		ExitBtn.setBorder(BorderFactory.createEmptyBorder());
+		ExitBtn.setBackground(Color.red);
+		ExitBtn.setForeground(Color.black);
+		
+		frame.add(printAllBtn);
+		frame.add(printTracksBtn);
+		frame.add(printByCreatorBtn);
+		frame.add(printAudiobooksBtn);
+		frame.add(printTvBtn);
+		frame.add(creatorTxt);
+		frame.add(sortByYearBtn);
+		frame.add(sortByTitleBtn);
+		frame.add(printByYearBtn);
+		frame.add(yearTxt);
+		frame.add(clearBtn);
+		frame.add(ExitBtn);
+	}
+	
+	public static void clearConsole() {
+		for (int i = 0; i < 50; ++i) {
+	        System.out.println();
+	    }
+	}
 
      private static int getLineCount(String path) throws IOException {
             File file = new File(path);
@@ -239,10 +370,12 @@ public class FinalProject {
         
         public static void sortByYear(List<Media<?>> media) {
             media.sort((a,b) -> Integer.compare(a.getYear(),b.getYear()));
+            media.forEach(System.out::println);
         }
         
         public static void sortByTitle(List<Media<?>> media) {
             media.sort((a,b) -> a.getTitle().compareTo(b.getTitle()));
+            media.forEach(System.out::println);
         }
         
         public static void printByYear(List<Media<?>> media, int year) {
@@ -282,7 +415,8 @@ public class FinalProject {
             printByYear(media, 2002);
             */          
            List<Media<?>> media = createMedia();
-           Scanner input = new Scanner(System.in);
+           GUI(media);
+        /*   Scanner input = new Scanner(System.in);
            int selection;
            String path = "media_database.csv";
            boolean active = true;
@@ -378,7 +512,7 @@ public class FinalProject {
                    System.out.println("Invalid Input! Please enter a number 1-10.");
                    input.nextLine();
                }
-           }
+           }*/
         }
         
     
