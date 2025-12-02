@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.io.PrintWriter;
 
 public class FinalProject {
 
@@ -52,15 +53,14 @@ public class FinalProject {
                     case "Track":
                         
                         String album = columns[3];
-                        Track track = new Track(title, creator, album, year, duration);
-                        track.setRating(Double.parseDouble(stringRating));
+                        Double trackRating = Double.parseDouble(columns[6]);
+                        Track track = new Track(title, creator, album, year, duration, trackRating);
                         mediaList.add(track);
                         break;
                     
                     case "AudioBook":
-                        Audiobook audiobook = new Audiobook(title, creator, year, duration);
                         ThumbRating thumbRating = ThumbRating.valueOf(stringRating.toUpperCase());
-                        audiobook.setRating(thumbRating);
+                        Audiobook audiobook = new Audiobook(title, creator, year, duration, thumbRating);
                         mediaList.add(audiobook);
                         break;
                     
@@ -68,7 +68,8 @@ public class FinalProject {
                         String showTitle = columns[7];
                         int seasonNum = Integer.parseInt(columns[8]);
                         int episodeNum = Integer.parseInt(columns[9]);
-                        TvEpisode tvEpisode = new TvEpisode(title, showTitle, creator, year, seasonNum, episodeNum, duration);
+                        Integer tvRating = Integer.parseInt(columns[6]);
+                        TvEpisode tvEpisode = new TvEpisode(title, creator, year, duration, tvRating, showTitle, seasonNum, episodeNum);
                         tvEpisode.setRating(Integer.parseInt(stringRating));
                         mediaList.add(tvEpisode);
                         break;
@@ -101,6 +102,107 @@ public class FinalProject {
             }
 
             return media;
+        }
+        
+        public static void addMedia(List<Media<?>> media, String path) {
+            Scanner input = new Scanner(System.in);
+            System.out.println("What type of media are you adding: (1) Track, (2) AudioBook, (3) TVEpisode");
+            int selection = input.nextInt();
+            input.nextLine();
+            
+            try (PrintWriter writer = new PrintWriter(new FileWriter(path, true))) {
+                if (selection == 1) {
+                    System.out.println("Title: ");
+                    String title = input.nextLine();
+                    System.out.println("Creator: ");
+                    String creator = input.nextLine();
+                    System.out.println("Album: ");
+                    String album = input.nextLine();
+                    System.out.println("Year: ");
+                    int year = input.nextInt();
+                    System.out.println("Duration: ");
+                    int duration = input.nextInt();
+                    System.out.println("Rating: ");
+                    Double rating = input.nextDouble();
+                    input.nextLine();
+    
+                    Track track = new Track(title, creator, album, year, duration, rating);
+                    media.add(track);
+                    
+                    writer.println("Track," + title + "," + creator + "," + album + "," + year + "," + duration + "," + rating);
+                } else if (selection == 2) {
+                    System.out.println("Title: ");
+                    String title = input.nextLine();
+                    System.out.println("Creator: ");
+                    String creator = input.nextLine();
+                    System.out.println("Year: ");
+                    int year = input.nextInt();
+                    System.out.println("Duration: ");
+                    int duration = input.nextInt();
+                    input.nextLine();
+                    System.out.println("Rating: ");
+                    ThumbRating rating = ThumbRating.valueOf(input.nextLine().toUpperCase());
+    
+                    Audiobook audiobook = new Audiobook(title, creator, year, duration, rating);
+                    media.add(audiobook);
+                    
+                    writer.println("Audiobook" + "," + title + "," + creator + "," + "," + year + "," + duration + "," + rating);
+                } else if (selection == 3) {
+                    System.out.println("Title: ");
+                    String title = input.nextLine();
+                    System.out.println("Creator: ");
+                    String creator = input.nextLine();
+                    System.out.println("Year: ");
+                    int year = input.nextInt();
+                    System.out.println("Duration: ");
+                    int duration = input.nextInt();
+                    System.out.println("Rating: ");
+                    Integer rating = input.nextInt();
+                    input.nextLine();
+                    System.out.println("Show Title: ");
+                    String showTitle = input.nextLine();
+                    System.out.println("Season Number: ");
+                    int seasonNum = input.nextInt();
+                    System.out.println("Episode Number: ");
+                    int episodeNum = input.nextInt();
+                    
+                    TvEpisode tvEpisode = new TvEpisode(title, creator, year, duration, rating, showTitle, seasonNum, episodeNum);
+                    media.add(tvEpisode);
+                    
+                    writer.println("TVEpisode" + "," + title + "," + creator + "," + "," + year + "," + duration + "," + rating + "," + showTitle + "," + seasonNum + "," + episodeNum);
+    
+                }
+                
+                System.out.println("Media has been added.");
+            } catch (IOException e) {
+                System.out.println("Error writing to file.");
+            }
+            
+            
+        }
+        
+        public static void removeMedia(List<Media<?>> media, String path, String title) {
+            
+            boolean removed = media.removeIf(a -> a.getTitle().equalsIgnoreCase(title));
+            
+            if(!removed) {
+                System.out.println("Media not found.");
+                return;
+            }
+            
+            try (PrintWriter writer = new PrintWriter(new FileWriter(path))){
+                for(Media<?> m : media) {
+                    if(m instanceof Audiobook a) {
+                        writer.println("Audiobook," + a.getTitle() + "," + a.getCreator() + "," + "," + a.getYear() + "," + a.getDuration() + "," + a.getRating());
+                    } else if (m instanceof Track t) {
+                        writer.println("Track," + t.getTitle() + "," + t.getCreator() + "," + t.getAlbum() + "," + t.getYear() + "," + t.getDuration() + "," + t.getRating());
+                    } else if (m instanceof TvEpisode e) {
+                        writer.println("TvEpisode," + e.getTitle() + "," + e.getCreator() + "," + "," + e.getYear() + "," + e.getDuration() + "," + e.getRating() + "," + e.getShowTitle() + "," + e.getSeasonNum() + "," + e.getEpisodeNum());
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("File not rewriten.");
+            }
         }
         
         public static void printAllMedia(List<Media<?>> media) {
@@ -178,12 +280,11 @@ public class FinalProject {
             
             System.out.println("\nPrint by Year: ");
             printByYear(media, 2002);
-            */
-           
+            */          
            List<Media<?>> media = createMedia();
            Scanner input = new Scanner(System.in);
            int selection;
-           
+           String path = "media_database.csv";
            boolean active = true;
            
            while(active) {
@@ -196,7 +297,9 @@ public class FinalProject {
                System.out.println("Sort by Year: Enter 7");
                System.out.println("Sort by Title: Enter 8");
                System.out.println("Print all Media by Year: Enter 9");
-               System.out.println("Exit Program: Enter 10");
+               System.out.println("Add Media Object: Enter 10");
+               System.out.println("Remove Media Object: Enter 11");
+               System.out.println("Exit Program: Enter 0");
                
                  try {
                    selection = input.nextInt();
@@ -247,6 +350,22 @@ public class FinalProject {
                            printByYear(media,year);
                            break;
                        case 10:
+                               addMedia(media, path); 
+                               break;
+                       case 11:
+                            {
+                               System.out.println("Please enter a title: ");
+                               String titleName = input.nextLine();
+                               
+                               if(titleName.isEmpty()) {
+                                   System.out.println("Error: You must enter a valid name.");
+                                   break;
+                               }
+                               
+                               removeMedia(media, path, titleName);
+                               break;
+                            }
+                       case 0:
                            System.out.println("Goodbye!");
                            active = false;
                            input.close();
