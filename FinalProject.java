@@ -189,19 +189,18 @@ public class FinalProject {
                         mediaList.add(track);
                         break;
                     
-                    case "AudioBook":
+                    case "Audiobook":
                         ThumbRating thumbRating = ThumbRating.valueOf(stringRating.toUpperCase());
                         Audiobook audiobook = new Audiobook(title, creator, year, duration, thumbRating);
                         mediaList.add(audiobook);
                         break;
                     
-                    case "TVEpisode":
+                    case "TvEpisode":
                         String showTitle = columns[7];
                         int seasonNum = Integer.parseInt(columns[8]);
                         int episodeNum = Integer.parseInt(columns[9]);
                         Integer tvRating = Integer.parseInt(columns[6]);
                         TvEpisode tvEpisode = new TvEpisode(title, creator, year, duration, tvRating, showTitle, seasonNum, episodeNum);
-                        tvEpisode.setRating(Integer.parseInt(stringRating));
                         mediaList.add(tvEpisode);
                         break;
                     
@@ -277,7 +276,7 @@ public class FinalProject {
                     Audiobook audiobook = new Audiobook(title, creator, year, duration, rating);
                     media.add(audiobook);
                     
-                    writer.println("Audiobook" + "," + title + "," + creator + "," + "," + year + "," + duration + "," + rating);
+                    writer.println("AudioBook" + "," + title + "," + creator + "," + "," + year + "," + duration + "," + rating);
                 } else if (selection == 3) {
                     System.out.println("Title: ");
                     String title = input.nextLine();
@@ -324,7 +323,7 @@ public class FinalProject {
             try (PrintWriter writer = new PrintWriter(new FileWriter(path))){
                 for(Media<?> m : media) {
                     if(m instanceof Audiobook a) {
-                        writer.println("Audiobook," + a.getTitle() + "," + a.getCreator() + "," + "," + a.getYear() + "," + a.getDuration() + "," + a.getRating());
+                        writer.println("AudioBook," + a.getTitle() + "," + a.getCreator() + "," + "," + a.getYear() + "," + a.getDuration() + "," + a.getRating());
                     } else if (m instanceof Track t) {
                         writer.println("Track," + t.getTitle() + "," + t.getCreator() + "," + t.getAlbum() + "," + t.getYear() + "," + t.getDuration() + "," + t.getRating());
                     } else if (m instanceof TvEpisode e) {
@@ -337,7 +336,7 @@ public class FinalProject {
         }
         
         public static void printAllMedia(List<Media<?>> media) {
-            media.forEach(System.out::println);
+            media.forEach(a -> System.out.println(a + " || 5 point scale rating: " + normalizeRating(a.getRating())));
         }
         
         public static void printAllTracks(List<Media<?>> media) {
@@ -364,9 +363,29 @@ public class FinalProject {
                 .forEach(System.out::println);
         }
         
-        //public static void sortByRating(List<Media<?>> media) {
-        //    media.sort((a,b) -> Double.compare(a.getRating(),b.getRating()));
-        //}
+        public static void sortByRating(List<Media<?>> media) {
+            media.sort((a,b) -> {
+                double rating1 = normalizeRating(a.getRating());
+                double rating2 = normalizeRating(b.getRating());
+                return Double.compare(rating2, rating1);
+            });
+        }
+        
+        public static double normalizeRating(Object rating) {
+            if(rating instanceof Double d) {
+                return d;
+            } else if (rating instanceof Integer i) {
+                return i/2.0;
+            } else if (rating instanceof ThumbRating) {
+                ThumbRating e = (ThumbRating) rating;
+                if(e == ThumbRating.UP){
+                    return 4.6;
+                } else if(e == ThumbRating.DOWN) {
+                    return 2.0;
+                }
+            }
+            return 0.0;
+        }
         
         public static void sortByYear(List<Media<?>> media) {
             media.sort((a,b) -> Integer.compare(a.getYear(),b.getYear()));
